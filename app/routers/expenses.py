@@ -113,24 +113,12 @@ async def get_expense_endpoint(
         Depends(get_db),
     ],
 ):
-    try:
-        return await get_expense_for_user(
+    return await get_expense_for_user(
             db,
             current_user,
             expense_id,
         )
 
-    except ExpenseNotFoundError:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Expense not found",
-        )
-
-    except ExpenseAccessDeniedError:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You do not have access to this expense",
-        )
 
 @router.patch(
     "/{expense_id}",

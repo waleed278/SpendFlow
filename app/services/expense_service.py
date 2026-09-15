@@ -1,6 +1,6 @@
 from sqlalchemy import Select, delete , select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.core.logging import logger
 from app.core.exceptions import (
     ExpenseAccessDeniedError,
     ExpenseLockedError,
@@ -36,7 +36,11 @@ async def create_expense(
 
     await db.commit()
     await db.refresh(expense)
-
+    logger.info(
+        "Expense%s created by user %s",
+        expense.id,
+        current_user.id,
+    )
     return expense
 
 async def get_expense_by_id(
